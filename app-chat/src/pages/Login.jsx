@@ -71,6 +71,7 @@ export function Login() {
                         placeholder='Nome de usuário'
                         name='username'
                         onChange={e => handleChage(e)}
+                        min="3"
                     />
                     <input
                         type="password"

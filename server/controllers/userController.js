@@ -23,13 +23,32 @@ const register = async (req, res, next) => {
         });
 
         delete user.password;
-        return res.jsonn({ user, status: true });
+        return res.json({ user, status: true });
 
     }catch(err) {
         next(err)
     }
 }
 
+const login = async (req, res, next) => {
+    try{
+        const { username, password } = req.body;
+        const user = await User.findOne({ username });
+        if (!user) {
+            return res.json({ msg: "O usuário ou senha incorreto! ", status: false })
+        }
+        const isPasswordValid = await bcrypt.compare(password, user.password);
+        if (!isPasswordValid) {
+            return res.json({ msg: "O usuário ou senha incorreto! ", status: false })
+        }
+        delete user.password;
+        return res.json({ user, status: true });
+    }catch(err) {
+        next(err)
+    }
+}
+
 module.exports = {
-    register
+    register,
+    login
 } 
